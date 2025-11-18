@@ -31,19 +31,34 @@ public class Anagram {
 
 	// Returns true if the two given strings are anagrams, false otherwise.
 	public static boolean isAnagram(String str1, String str2) {
-		str2 = preProcess(str2);
+
 		str1 = preProcess(str1);
+		str2 = preProcess(str2);
 
 		if (str1.length() != str2.length()) {
 			return false;
 		}
 
-		char[] arr1 = str1.toCharArray();
 		char[] arr2 = str2.toCharArray();
-		Arrays.sort(arr1);
-		Arrays.sort(arr2);
 
-		return Arrays.equals(arr1, arr2);
+		for (int i = 0; i < str1.length(); i++) {
+			char c = str1.charAt(i);
+			boolean found = false;
+
+			for (int j = 0; j < arr2.length; j++) {
+				if (c == arr2[j]) {
+					arr2[j] = '*';
+					found = true;
+					break;
+				}
+			}
+
+			if (!found) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	// Returns a preprocessed version of the given string: all the letter characters
@@ -67,14 +82,17 @@ public class Anagram {
 	// Returns a random anagram of the given string. The random anagram consists of
 	// the same
 	// characters as the given string, re-arranged in a random order.
-	public static String randomAnagram(String str) {
-		char[] arr = str.toCharArray();
-		for (int i = 0; i < str.length(); i++) {
-			int j = (int) (Math.random() * arr.length);
-			char tmp = arr[i];
-			arr[i] = arr[j];
-			arr[j] = tmp;
-		}
-		return new String(arr);
-	}
+public static String randomAnagram(String str) {
+
+    StringBuilder source = new StringBuilder(str);
+    StringBuilder result = new StringBuilder();
+
+    while (source.length() > 0) {
+        int randIndex = (int)(Math.random() * source.length());
+        char c = source.charAt(randIndex);
+        result.append(c);
+        source.deleteCharAt(randIndex); 
+    }
+
+    return result.toString();
 }
